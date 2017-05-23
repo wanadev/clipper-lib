@@ -1769,9 +1769,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.Y = 0;
           }
       }
-    if (this.X == 31040 && this.Y == 1698) {
-      debugger;
-    }
   };
   ClipperLib.IntPoint.op_Equality = function (a, b) {
     //return a == b;
@@ -2037,6 +2034,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     return false;
   };
   ClipperLib.ClipperBase.prototype.mergePointData = function (newPoint, ptA, ptB) {
+    if (this.mapData[newPoint.Y] && this.mapData[newPoint.Y][newPoint.X]) return;
     var dataA = this.getDataFromMap(ptA);
     var dataB = this.getDataFromMap(ptB);
     this.initData(newPoint, dataA);
@@ -2049,12 +2047,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     var resData = void 0;
     if (!yMatch) {
       this.mapData[point.Y] = {};
-      this.mapData[point.Y][point.X] = data;
+      this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
       return;
     }
     var xMatch = this.mapData[point.Y][point.X];
     if (!xMatch) {
-      this.mapData[point.Y][point.X] = data;
+      this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
     } else {
       this.initMergeData(this.mapData[point.Y][point.X], data);
     }
@@ -2065,24 +2063,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     Object.keys(newData).forEach(function (key) {
       if (newData[key] === oldData[key]) return;
       if (oldData[key] && oldData[key] instanceof Array) {
-        var _oldData$key;
+        for (var i in newData[key]) {
+          var _oldData$key;
 
-        (_oldData$key = oldData[key]).push.apply(_oldData$key, _toConsumableArray(newData[key]));
-        oldData[key] = Array.from(new Set(oldData[key]));
+          (_oldData$key = oldData[key]).push.apply(_oldData$key, _toConsumableArray(newData[key]));
+          oldData[key] = Array.from(new Set(oldData[key]));
+        }
         return;
       }
       oldData[key] = newData[key];
     });
   };
-
-  ClipperLib.ClipperBase.prototype.testDebug = function (pt) {
-    // let yMatch = this.mapData[pt.Y];
-    // if(pt.X ==10 && pt.Y == 50){ debugger;}
-    // if(!yMatch )return
-    // let xMatch = yMatch[pt.X];
-    // if(pt.X ==3845 && pt.Y == 5470 && !xMatch){ debugger}
-  };
-
   ClipperLib.ClipperBase.prototype.getDataFromMap = function (pt) {
     if (!pt) return;
     var yMatch = this.mapData[pt.Y];
@@ -2092,12 +2083,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   };
 
   ClipperLib.ClipperBase.prototype.setData = function (pt) {
-    if (this.X == 38027 && this.Y == 1698) {
-      debugger;
-    }
-
     pt.data = this.getDataFromMap(pt);
-    // this.testDebug(pt);
   };
 
   ClipperLib.ClipperBase.prototype.SlopesEqual = ClipperLib.ClipperBase.SlopesEqual = function () {
@@ -2146,6 +2132,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     ClipperLib.Clear(this.m_edges);
     this.m_UseFullRange = false;
     this.m_HasOpenPaths = false;
+    this.mapData = {};
   };
   ClipperLib.ClipperBase.prototype.DisposeLocalMinimaList = function () {
     while (this.m_MinimaList !== null) {
@@ -3645,9 +3632,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             return;
           } else if (dir == ClipperLib.Direction.dLeftToRight) {
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
-            // this.initData(Pt);
             this.mergePointData(Pt, e.Curr, horzEdge.Curr);
-            // Pt.parents = [e.Curr, horzEdge.Curr];
             this.IntersectEdges(horzEdge, e, Pt);
           } else {
             var Pt = new ClipperLib.IntPoint(e.Curr.X, horzEdge.Curr.Y);
@@ -3734,7 +3719,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     while (e !== null) {
       e.PrevInSEL = e.PrevInAEL;
       e.NextInSEL = e.NextInAEL;
-      // e.Curr.X = ClipperLib.Clipper.TopX(e, topY);
       var newPoint = new ClipperLib.IntPoint(ClipperLib.Clipper.TopX(e, topY), e.Curr.Y);
       this.mergePointData(newPoint, e.Curr);
       e.Curr.X = newPoint.X;
@@ -3863,6 +3847,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         b1 = edge1.Bot.Y - edge1.Bot.X / edge1.Dx;
         ip.Y = ClipperLib.Clipper.Round(ip.X / edge1.Dx + b1);
       }
+
       this.mergePointData(ip, save, edge1.Bot);
       this.mergePointData(ip, save, edge2.Bot);
     } else {
@@ -3871,7 +3856,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       var q = (b2 - b1) / (edge1.Dx - edge2.Dx);
       ip.Y = ClipperLib.Clipper.Round(q);
       if (Math.abs(edge1.Dx) < Math.abs(edge2.Dx)) ip.X = ClipperLib.Clipper.Round(edge1.Dx * q + b1);else ip.X = ClipperLib.Clipper.Round(edge2.Dx * q + b2);
-
       this.mergePointData(ip, save, edge2.Bot);
       this.mergePointData(ip, save, edge1.Bot);
     }
@@ -3895,7 +3879,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     if (ip.Y > edge1.Curr.Y) {
       ip.Y = edge1.Curr.Y;
       this.mergePointData(ip, save, edge1.Curr);
-
       //better to use the more vertical edge to derive X ...
       if (Math.abs(edge1.Dx) > Math.abs(edge2.Dx)) ip.X = ClipperLib.Clipper.TopX(edge2, ip.Y);else ip.X = ClipperLib.Clipper.TopX(edge1, ip.Y);
     }
@@ -3923,9 +3906,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
           this.AddEdgeToSEL(e);
         } else {
           var newPoint = new ClipperLib.IntPoint(ClipperLib.Clipper.TopX(e, topY), topY);
-          this.mergePointData(newPoint, e.Curr, newPoint);
-          // e.Curr.X =
-          // e.Curr.Y = topY;
+          this.mergePointData(newPoint, e.Curr);
           e.Curr.X = newPoint.X;
           e.Curr.Y = newPoint.Y;
         }
@@ -5703,20 +5684,13 @@ var holegen = {
       holes = holegen._getHoles();
     }
     holes = holegen.flipHoles(holes);
-    console.log(holes);
     holegen._appendParrents(holes);
-    console.log("HOLES");
-    for (var i in holes) {
-      console.log("index: ", i);
-      console.log(holes[i]);
-    }
 
     var concatHoles = [];
-    for (var _i in holes) {
-      concatHoles.push.apply(concatHoles, _toConsumableArray(holes[_i]));
+    for (var i in holes) {
+      concatHoles.push.apply(concatHoles, _toConsumableArray(holes[i]));
     }
     var tests = holegen._getCombinations(holes, operation);
-    // tests= [tests[0]];
     return { holes: holes, concatHoles: concatHoles, tests: tests };
   }
 
@@ -5733,14 +5707,6 @@ module.exports = {
   getData: holegen.getData,
   getTestResult: holegen.getTestResult
 };
-
-// regexp clipper
-/*
-  ([a-zA-Z\.\[\]1-9]+\.)(data)( = )([a-zA-Z\.\[\]1-9]+\.data)
-  $1_data = $4
-
-
-*/
 
 },{"./holegen.js":2,"babel-polyfill":4}],4:[function(require,module,exports){
 (function (global){
