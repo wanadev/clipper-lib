@@ -2420,22 +2420,22 @@
   };
   ClipperLib.ClipperBase.prototype.mergePointData = function(newPoint, ptA,ptB){
     if(this.mapData[newPoint.Y]&&this.mapData[newPoint.Y][newPoint.X]) return;
-    const dataA = this.getDataFromMap(ptA)
-    const dataB = this.getDataFromMap(ptB);
+    var dataA = this.getDataFromMap(ptA)
+    var dataB = this.getDataFromMap(ptB);
     this.initData(newPoint, dataA);
     this.initData(newPoint, dataB);
   };
 
   ClipperLib.ClipperBase.prototype.initData= function(point, data){
     if(!data) return;
-      const yMatch = this.mapData[point.Y];
-      let resData;
+      var yMatch = this.mapData[point.Y];
+      var resData;
       if(!yMatch){
         this.mapData[point.Y]= {};
         this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
         return;
     }
-    let xMatch = this.mapData[point.Y][point.X];
+    var xMatch = this.mapData[point.Y][point.X];
     if(!xMatch) {
       this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
     }
@@ -2446,21 +2446,23 @@
 
   ClipperLib.ClipperBase.prototype.initMergeData = function(oldData,newData){
     if(newData === oldData) return;
-    Object.keys(newData).forEach(key => {
-      if(newData[key] === oldData[key]) return;
-      if(oldData[key] && oldData[key] instanceof Array) {
-        for(let i in newData[key]){
-          oldData[key].push(...newData[key]);
+
+
+    Object.keys(newData).forEach(function (key) {
+        if(newData[key] === oldData[key]) return;
+        if(oldData[key] && oldData[key] instanceof Array) {
+          for(var i = 0; i < newData[key].length; i++){
+            oldData[key].push(newData[key][i]);
+          }
           oldData[key]= Array.from(new Set(oldData[key]));
+          return;
         }
-        return;
-      }
-      oldData[key]=newData[key];
-    });
+        oldData[key]=newData[key];
+      });
   };
   ClipperLib.ClipperBase.prototype.getDataFromMap = function(pt){
     if(!pt) return;
-    let yMatch = this.mapData[pt.Y];
+    var yMatch = this.mapData[pt.Y];
     if(yMatch){ return yMatch[pt.X];}
   };
 
@@ -4705,7 +4707,7 @@
     {
       e.PrevInSEL = e.PrevInAEL;
       e.NextInSEL = e.NextInAEL;
-      const newPoint = new ClipperLib.IntPoint( ClipperLib.Clipper.TopX(e, topY), e.Curr.Y);
+      var newPoint = new ClipperLib.IntPoint( ClipperLib.Clipper.TopX(e, topY), e.Curr.Y);
       this.mergePointData(newPoint,e.Curr);
       e.Curr.X= newPoint.X;
       e = e.NextInAEL;
@@ -4838,7 +4840,7 @@
     var b1, b2;
     //nb: with very large coordinate values, it's possible for SlopesEqual() to
     //return false but for the edge.Dx value be equal due to double precision rounding.
-    const save = new ClipperLib.IntPoint(ip.X,ip.Y);
+    var save = new ClipperLib.IntPoint(ip.X,ip.Y);
     if (edge1.Dx == edge2.Dx)
 		{
 			ip.Y = edge1.Curr.Y;
@@ -4958,7 +4960,7 @@
         }
         else
         {
-          const newPoint = new ClipperLib.IntPoint(ClipperLib.Clipper.TopX(e, topY),topY);
+          var newPoint = new ClipperLib.IntPoint(ClipperLib.Clipper.TopX(e, topY),topY);
           this.mergePointData(newPoint,e.Curr);
           e.Curr.X = newPoint.X;
           e.Curr.Y = newPoint.Y;
