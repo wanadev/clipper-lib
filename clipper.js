@@ -2432,14 +2432,12 @@
       var resData;
       if(!yMatch){
         this.mapData[point.Y]= {};
-        // this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
         this.mapData[point.Y][point.X] = data;
         return;
     }
     var xMatch = this.mapData[point.Y][point.X];
     if(!xMatch) {
       this.mapData[point.Y][point.X] = data;  
-      // this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
     }
     else {
       this.initMergeData(this.mapData[point.Y][point.X],data);
@@ -2447,6 +2445,7 @@
   };
 
   ClipperLib.ClipperBase.prototype.initMergeData = function(oldData,newData){
+    
     if(newData === oldData) return;
     
     if(!(oldData instanceof Array)) {
