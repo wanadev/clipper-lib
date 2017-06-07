@@ -1,8 +1,6 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.holes = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 // rev 482
 /********************************************************************************
  *                                                                              *
@@ -2044,7 +2042,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   ClipperLib.ClipperBase.prototype.initData = function (point, data) {
     if (!data) return;
     var yMatch = this.mapData[point.Y];
-    var resData = void 0;
+    var resData;
     if (!yMatch) {
       this.mapData[point.Y] = {};
       this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
@@ -2060,15 +2058,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
   ClipperLib.ClipperBase.prototype.initMergeData = function (oldData, newData) {
     if (newData === oldData) return;
+
     Object.keys(newData).forEach(function (key) {
       if (newData[key] === oldData[key]) return;
       if (oldData[key] && oldData[key] instanceof Array) {
-        for (var i in newData[key]) {
-          var _oldData$key;
-
-          (_oldData$key = oldData[key]).push.apply(_oldData$key, _toConsumableArray(newData[key]));
-          oldData[key] = Array.from(new Set(oldData[key]));
+        for (var i = 0; i < newData[key].length; i++) {
+          oldData[key].push(newData[key][i]);
         }
+        oldData[key] = Array.from(new Set(oldData[key]));
         return;
       }
       oldData[key] = newData[key];

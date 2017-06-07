@@ -2432,12 +2432,14 @@
       var resData;
       if(!yMatch){
         this.mapData[point.Y]= {};
-        this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+        // this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+        this.mapData[point.Y][point.X] = data;
         return;
     }
     var xMatch = this.mapData[point.Y][point.X];
     if(!xMatch) {
-      this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+      this.mapData[point.Y][point.X] = data;  
+      // this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
     }
     else {
       this.initMergeData(this.mapData[point.Y][point.X],data);
@@ -2446,19 +2448,19 @@
 
   ClipperLib.ClipperBase.prototype.initMergeData = function(oldData,newData){
     if(newData === oldData) return;
+    
+    if(!(oldData instanceof Array)) {
+      oldData=[oldData];
+    }
+    
+    if(!(newData instanceof Array)) {
+      newData=[newData];
+    }
 
-
-    Object.keys(newData).forEach(function (key) {
-        if(newData[key] === oldData[key]) return;
-        if(oldData[key] && oldData[key] instanceof Array) {
-          for(var i = 0; i < newData[key].length; i++){
-            oldData[key].push(newData[key][i]);
-          }
-          oldData[key]= Array.from(new Set(oldData[key]));
-          return;
-        }
-        oldData[key]=newData[key];
-      });
+    for(var i = 0; i < newData.length; i++){
+      oldData.push(newData[i]);
+    }
+    oldData=Array.from(new Set(oldData));
   };
   ClipperLib.ClipperBase.prototype.getDataFromMap = function(pt){
     if(!pt) return;
