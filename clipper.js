@@ -2057,6 +2057,7 @@
           this.X = ClipperLib.Clipper.Round(dp.X);
           this.Y = ClipperLib.Clipper.Round(dp.Y);
           this.Z = 0;
+          this.data = dp.data;
         }
         else // public IntPoint(IntPoint pt)
         {
@@ -2065,6 +2066,7 @@
           this.X = pt.X;
           this.Y = pt.Y;
           this.Z = pt.Z;
+          this.data = pt.data;
         }
       }
       else // public IntPoint()
@@ -2088,12 +2090,14 @@
           var dp = a[0];
           this.X = ClipperLib.Clipper.Round(dp.X);
           this.Y = ClipperLib.Clipper.Round(dp.Y);
+          this.data = dp.data;
         }
         else // public IntPoint(IntPoint pt)
         {
           var pt = a[0];
           this.X = pt.X;
           this.Y = pt.Y;
+          this.data = pt.data;
         }
       }
       else // public IntPoint(IntPoint pt)
@@ -2437,7 +2441,7 @@
     }
     var xMatch = this.mapData[point.Y][point.X];
     if(!xMatch) {
-      this.mapData[point.Y][point.X] = data;  
+      this.mapData[point.Y][point.X] = data;
     }
     else {
       this.initMergeData(this.mapData[point.Y][point.X],data);
@@ -2445,13 +2449,13 @@
   };
 
   ClipperLib.ClipperBase.prototype.initMergeData = function(oldData,newData){
-    
+
     if(newData === oldData) return;
-    
+
     if(!(oldData instanceof Array)) {
       oldData=[oldData];
     }
-    
+
     if(!(newData instanceof Array)) {
       newData=[newData];
     }
