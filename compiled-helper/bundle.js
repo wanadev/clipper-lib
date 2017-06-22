@@ -1729,6 +1729,7 @@
             this.X = ClipperLib.Clipper.Round(dp.X);
             this.Y = ClipperLib.Clipper.Round(dp.Y);
             this.Z = 0;
+            this.data = dp.data;
           } else // public IntPoint(IntPoint pt)
           {
             var pt = a[0];
@@ -1736,6 +1737,7 @@
             this.X = pt.X;
             this.Y = pt.Y;
             this.Z = pt.Z;
+            this.data = pt.data;
           }
       } else // public IntPoint()
         {
@@ -1755,11 +1757,13 @@
               var dp = a[0];
               this.X = ClipperLib.Clipper.Round(dp.X);
               this.Y = ClipperLib.Clipper.Round(dp.Y);
+              this.data = dp.data;
             } else // public IntPoint(IntPoint pt)
             {
               var pt = a[0];
               this.X = pt.X;
               this.Y = pt.Y;
+              this.data = pt.data;
             }
         } else // public IntPoint(IntPoint pt)
           {
@@ -2045,31 +2049,33 @@
     var resData;
     if (!yMatch) {
       this.mapData[point.Y] = {};
-      this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+      this.mapData[point.Y][point.X] = data;
       return;
     }
     var xMatch = this.mapData[point.Y][point.X];
     if (!xMatch) {
-      this.mapData[point.Y][point.X] = JSON.parse(JSON.stringify(data));
+      this.mapData[point.Y][point.X] = data;
     } else {
       this.initMergeData(this.mapData[point.Y][point.X], data);
     }
   };
 
   ClipperLib.ClipperBase.prototype.initMergeData = function (oldData, newData) {
+
     if (newData === oldData) return;
 
-    Object.keys(newData).forEach(function (key) {
-      if (newData[key] === oldData[key]) return;
-      if (oldData[key] && oldData[key] instanceof Array) {
-        for (var i = 0; i < newData[key].length; i++) {
-          oldData[key].push(newData[key][i]);
-        }
-        oldData[key] = Array.from(new Set(oldData[key]));
-        return;
-      }
-      oldData[key] = newData[key];
-    });
+    if (!(oldData instanceof Array)) {
+      oldData = [oldData];
+    }
+
+    if (!(newData instanceof Array)) {
+      newData = [newData];
+    }
+
+    for (var i = 0; i < newData.length; i++) {
+      oldData.push(newData[i]);
+    }
+    oldData = Array.from(new Set(oldData));
   };
   ClipperLib.ClipperBase.prototype.getDataFromMap = function (pt) {
     if (!pt) return;
@@ -5504,10 +5510,9 @@ var holegen = {
       clipType: operation,
       subjectFill: clipperLib.PolyFillType.pftNonZero,
       clipFill: clipperLib.PolyFillType.pftNonZero
-    };
 
-    // settup and execute clipper
-    var cpr = new clipperLib.Clipper();
+      // settup and execute clipper
+    };var cpr = new clipperLib.Clipper();
     cpr.AddPaths(pathsSubj, clipperLib.PolyType.ptSubject, true);
     if (pathsClip) {
       cpr.AddPaths(pathsClip, clipperLib.PolyType.ptClip, true);
@@ -5536,6 +5541,10 @@ var holegen = {
 
 
     return holegen.executeClipper(test.subj, test.clip, test.operation, polyTree);
+  },
+
+  cleanPath: function cleanPath(path) {
+    return clipperLib.Clipper.CleanPolygon(path, 1);
   },
 
   _getKazaHoles: function _getKazaHoles(operation) {

@@ -110,6 +110,12 @@ describe('Clipper', function() {
     getTests().forEach((test) => {
           runTest(test.operation, test.polyFlag, test.kazaFlag );
     });
+
+     describe('CLean', function() {
+         const path = JSON.parse('[{"X":11516650,"Y":7157118,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":9196025,"Y":9058353,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":-11216650,"Y":-15857118,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":-8896025,"Y":-17758353,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]}]');
+         const res = clipperLib.Clipper.CleanPolygon(path,10000);
+         expect(res[0].data).to.be.ok();
+     });
   });
 
 });
