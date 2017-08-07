@@ -2100,6 +2100,11 @@
           this.data = pt.data;
         }
       }
+      else if (alen === 3) {
+          this.X = a[0];
+          this.Y = a[1];
+          this.data = a[2];
+      }
       else // public IntPoint(IntPoint pt)
       {
         this.X = 0;
@@ -6343,7 +6348,8 @@
           {
             this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + X * delta),
                                                          ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + Y * delta),
-                                                         this.m_srcPoly[0].data ));
+                                                         this.m_srcPoly[0].data
+                                                     ));
             var X2 = X;
             X = X * this.m_cos - this.m_sin * Y;
             Y = X2 * this.m_sin + Y * this.m_cos;
@@ -6356,8 +6362,9 @@
           for (var j = 0; j < 4; ++j)
           {
             this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].X + X * delta),
-                                                         ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + Y * delta),
-                                                         this.m_srcPoly[0].data));
+                                                        ClipperLib.ClipperOffset.Round(this.m_srcPoly[0].Y + Y * delta),
+                                                        this.m_srcPoly[0].data
+                                                    ));
             if (X < 0)
               X = 1;
             else if (Y < 0)
@@ -6547,10 +6554,9 @@
 			var cosA = (this.m_normals[k].X * this.m_normals[j].X + this.m_normals[j].Y * this.m_normals[k].Y);
 			if (cosA > 0) // angle ==> 0 degrees
 			{
-				this.m_destPoly.push(new ClipperLib.IntPoint(
-                    ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
-					ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),
-                    this.m_srcPoly[j].data));
+				this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
+					                                         ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),
+                                                             this.m_srcPoly[j].data));
 				return k;
 			}
 			//else angle ==> 180 degrees
@@ -6561,17 +6567,14 @@
       this.m_sinA = -1.0;
     if (this.m_sinA * this.m_delta < 0)
     {
-      this.m_destPoly.push(new ClipperLib.IntPoint(
-          ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
-          ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),
-          this.m_srcPoly[j].data
-      ));
+      this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[k].X * this.m_delta),
+                                                    ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[k].Y * this.m_delta),
+                                                    this.m_srcPoly[j].data));
+
       this.m_destPoly.push(new ClipperLib.IntPoint(this.m_srcPoly[j]));
-      this.m_destPoly.push(new ClipperLib.IntPoint(
-          ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * this.m_delta),
-          ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * this.m_delta),
-          this.m_srcPoly[j].data
-      ));
+      this.m_destPoly.push(new ClipperLib.IntPoint(ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + this.m_normals[j].X * this.m_delta),
+                                                   ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + this.m_normals[j].Y * this.m_delta),
+                                                   this.m_srcPoly[j].data));
     }
     else
       switch (jointype)
@@ -6612,7 +6615,6 @@
   {
     var q = this.m_delta / r;
     this.m_destPoly.push(new ClipperLib.IntPoint(
-
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].X + (this.m_normals[k].X + this.m_normals[j].X) * q),
       ClipperLib.ClipperOffset.Round(this.m_srcPoly[j].Y + (this.m_normals[k].Y + this.m_normals[j].Y) * q),
       this.m_srcPoly[j].data));

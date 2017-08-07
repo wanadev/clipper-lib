@@ -28,6 +28,19 @@ function isOkPoint(pointOut, pathIn) {
   return true;
 }
 
+function isOkResultOffset(pathsIn, pathsOut) {
+  const pathIn = [];
+  for (let i in pathsIn) {
+    pathIn.push(...pathsIn[i]);
+  }
+  for (let i in pathsOut) {
+    for (let j in pathsOut[i]) {
+      if (!pathsOut[i][j].data) return false;
+    }
+  }
+  return true;
+}
+
 function isOkResult(pathsIn, pathsOut) {
   const pathIn = [];
   for (let i in pathsIn) {
@@ -44,10 +57,9 @@ function isOkResult(pathsIn, pathsOut) {
 function runTestOffset(kazaFlag) {
     const operation = "offset";
     holes.getData(operation,kazaFlag).tests.forEach((test) => {
-      // if(test.index !== 8) return
-      it(getTestName(operation, false,kazaFlag)+', test index= '+ test.index, function() {
+      it(getTestName(operation, false,kazaFlag)+' OFFSET PATH, test index= '+ test.index, function() {
         let res = holes.executeOffset(test.subj.concat(test.clip));
-          expect(isOkResult(test.subj.concat(test.clip), res)).to.be.equal(true);
+          expect(isOkResultOffset(test.subj.concat(test.clip), res)).to.be.equal(true);
       });
     });
 }
@@ -125,6 +137,11 @@ describe('Clipper', function() {
     // getTests().forEach((test) => {
     //       runTest(test.operation, test.polyFlag, test.kazaFlag );
     // });
+
+    getTests().forEach((test) => {
+          runTestOffset(false);
+    });
+
 
      describe('CLean', function() {
          const path = JSON.parse('[{"X":11516650,"Y":7157118,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":9196025,"Y":9058353,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":-11216650,"Y":-15857118,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":-8896025,"Y":-17758353,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]}]');
