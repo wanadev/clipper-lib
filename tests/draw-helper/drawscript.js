@@ -99,9 +99,12 @@ draw:function (){
     var ctx2= canvas2.getContext('2d');
 
     const tests= holes.getData(clipperLib.ClipType.ctUnion,true);
-    for(let i in tests.tests){
-      drawscript.checkTest( tests,i,ctx1,ctx2);
-    }
+    // for(let i in tests.tests){
+    //   drawscript.checkTest( tests,i,ctx1,ctx2);
+    // }
+
+    holes.executeOffset(JSON.parse('[[{"X":30,"Y":30,"data":{"index":0}},{"X":130,"Y":30,"data":{"index":1}},{"X":130,"Y":130,"data":{"index":2}},{"X":30,"Y":130,"data":{"index":3}}],\
+                                     [{"X":60,"Y":60,"data":{"index":10}},{"X":60,"Y":100,"data":{"index":11}},{"X":100,"Y":100,"data":{"index":12}},{"X":100,"Y":60,"data":{"index":13}}]]'));
 
 
 },

@@ -41,6 +41,17 @@ function isOkResult(pathsIn, pathsOut) {
   return true;
 }
 
+function runTestOffset(kazaFlag) {
+    const operation = "offset";
+    holes.getData(operation,kazaFlag).tests.forEach((test) => {
+      // if(test.index !== 8) return
+      it(getTestName(operation, false,kazaFlag)+', test index= '+ test.index, function() {
+        let res = holes.executeOffset(test.subj.concat(test.clip));
+          expect(isOkResult(test.subj.concat(test.clip), res)).to.be.equal(true);
+      });
+    });
+}
+
 function runTest(operation, polyFlag, kazaFlag ){
   holes.getData(operation,kazaFlag).tests.forEach((test) => {
     // if(test.index !== 8) return
@@ -89,6 +100,10 @@ function getTestName(operation, polyFlag,kazaFlag){
   return res;
 }
 
+function getTestsOffset() {
+        const operations = [clipperLib.ClipType.ctUnion,clipperLib.ClipType.ctXor, clipperLib.ClipType.ctIntersection,clipperLib.ClipType.ctDifference];
+}
+
 function getTests(){
   const operations = [clipperLib.ClipType.ctUnion,clipperLib.ClipType.ctXor, clipperLib.ClipType.ctIntersection,clipperLib.ClipType.ctDifference];
   const polyFlags = [false,true];
@@ -107,14 +122,23 @@ function getTests(){
 
 describe('Clipper', function() {
   describe('executeClipper', function() {
-    getTests().forEach((test) => {
-          runTest(test.operation, test.polyFlag, test.kazaFlag );
-    });
+    // getTests().forEach((test) => {
+    //       runTest(test.operation, test.polyFlag, test.kazaFlag );
+    // });
 
      describe('CLean', function() {
          const path = JSON.parse('[{"X":11516650,"Y":7157118,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":9196025,"Y":9058353,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":-11216650,"Y":-15857118,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]},{"X":-8896025,"Y":-17758353,"data":[{"id":"4bddee4a-b140-43d6-8524-39c2c5128b7d","edgeIndex":3}]}]');
          const res = clipperLib.Clipper.CleanPolygon(path,10000);
          expect(res[0].data).to.be.ok();
+     });
+
+     describe('union2', function() {
+         const paths = JSON.parse('[[{"X":31400000,"Y":25000000},{"X":-31400000,"Y":25000000},{"X":-31400000,"Y":-1000000000},{"X":31400000,"Y":-1000000000}],[{"X":-31400000,"Y":25000000},{"X":31400000,"Y":25000000},{"X":31400000,"Y":-1000000000},{"X":-31400000,"Y":-1000000000}]]');
+         paths[0].reverse();
+
+         const res =  holes.executeClipper(paths, [], clipperLib.ClipType.ctUnion);
+         expect(res).to.be.ok();
+         console.log("res",  res);
      });
   });
 

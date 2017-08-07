@@ -32,6 +32,20 @@ var holegen = {
   return holegen.simplifyPaths(clipperLib.Clipper.PolyTreeToPaths(res));
 },
 
+executeOffset:function(paths) {
+  const delta = 10;
+  const joinType = [clipperLib.JoinType.jtMiter];
+  const endType = clipperLib.EndType.etClosedPolygon;
+  const clipperOffset = new clipperLib.ClipperOffset(); // constructor
+  const res = new clipperLib.Paths(); // empty solution
+
+  clipperOffset.AddPaths(paths, joinType, endType);
+  clipperOffset.MiterLimit = 2;
+  clipperOffset.ArcTolerance = 0.25;
+  clipperOffset.Execute(res, delta);
+  return res;
+},
+
 simplifyPaths:function(paths){
   return clipperLib.Clipper.SimplifyPolygons(paths, clipperLib.PolyFillType.pftNonZero);
 },
