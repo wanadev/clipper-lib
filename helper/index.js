@@ -1,4 +1,4 @@
-require("babel-polyfill");
+require("core-js/stable");
 const holegen = require("./holegen.js");
 
 module.exports =  {
