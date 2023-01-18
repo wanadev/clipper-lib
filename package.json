@@ -13,13 +13,14 @@
     "watchify": "watchify --debug helper/index.js -o compiled-helper/bundle.js -v",
     "watchifyDraw": "watchify --debug tests/draw-helper/index.js -o tests/draw-helper/bundle.js -v"
   },
-  "author": [
+  "contributors": [
     "Angus Johnson (Original library)",
     "Timo (Translation to JS)",
-    "junmer"
+    "junmer",
+    "wanadev"
   ],
   "license": "BSL",
-  "dependencies": {
+  "devDependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^7.3.0",
