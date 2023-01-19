@@ -16,7 +16,7 @@ This file is a memo for the maintainer.
 
 * Build ``compiled-helper/*.js`` files: ``npm run compile``
 * Edit / update changelog in ``ChangeLog.txt``
-* Add changelog and compiled files to git staging ``git add ChangeLog.txt compiled-helper/*.js``
+* Add changelog and compiled files to git commit ``git add ChangeLog.txt compiled-helper/*.js && git commit``
 * Bump version and create tag with ``npm version [patch|minor|major]``
 * ``git push && git push --tags``
 

@@ -2,6 +2,27 @@
 Javascript Clipper Change Log
 ============================================================
 
+v7.0.0 (19 January 2023)
+* update babel to v7.20
+* update browserify to v17.0
+* remove babel-polyfill and use core-js v3.27
+* update watchify to v4.0
+* update lodash to v4.17.21
+* update mocha to v10.2.0
+* add github workflow for tests
+* add github config for dependabot
+* add NVM config, using node 14 for development
+
+v6.2.4 (18 January 2023)
+* move npm dependencies to devDependencies
+
+v6.2.3 (07 August 2017)
+* add data in clipper points for offet operation
+
+v6.2.2 (22 June 2017)
+* Wanadev fork of clipper-lib
+* Add data in clipper points during operations
+
 v6.2.1.0 (17 June 2016)
 * Updates from C# Clipper upto 6.2.1 Rev 482 (31 October 2014).
 
