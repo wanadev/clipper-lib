@@ -5383,7 +5383,6 @@ var holegen = {
       res = new clipperLib.Paths();
     }
     cpr.Execute(options.clipType, res, options.subjectFill, options.clipFill);
-    debugger;
     if (!polyTree) {
       return holegen.simplifyPaths(res);
     }
