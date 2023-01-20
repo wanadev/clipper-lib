@@ -27,7 +27,6 @@ var holegen = {
   }
   cpr.Execute(options.clipType, res, options.subjectFill, options.clipFill);
 
-  debugger;
   if(!polyTree) {return holegen.simplifyPaths(res) ;}
   return holegen.simplifyPaths(clipperLib.Clipper.PolyTreeToPaths(res));
 },
