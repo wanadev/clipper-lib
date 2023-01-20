@@ -33,8 +33,8 @@ chooseColor: function (point){
 },
 
 drawPaths: function (ctx,paths, position) {
-  ctx.clearRect(0, 0, 1200, 1000);
-  for(let i in paths ){
+  ctx.clearRect(position.X, position.Y, 300, 333);
+  for (const i in paths ){
     drawscript.drawPath(ctx, paths[i],position)
   }
 },
@@ -79,16 +79,30 @@ drawPath:function (ctx, pathToDraw, position) {
 
 },
 
-checkTest:function ( tests,index,ctxIn,ctxOut){
-  if(index!=8){return}
-  const pt ={X:0,Y:100};
+checkTest:function (tests,index,ctxIn,ctxOut){
+  const scale = 1 ;/// Math.ceil(tests.tests.length / 12)
+
+  ctxIn.scale(scale, scale);
+  ctxOut.scale(scale, scale);
+
+  const COLS = 5;
+  const ROWS = 14;
+  row = Math.floor(index / COLS);
+  rowSize = Math.floor(3600 / ROWS)
+  column = index % COLS;
+  columnSize = Math.floor(900 / COLS);
+
+  const pt = { X:0 + column*columnSize, Y:100 + row*rowSize };
   const test = tests.tests[index];
     drawscript.drawPaths(ctxIn,test.subj.concat(test.clip),pt);
   let res = holes.getTestResult(test,false);
-    drawscript.drawPaths(ctxOut,res,pt);
+    drawscript.drawPaths(ctxOut,res,pt, scale);
 
-    ctxIn.font = "30px Arial";
-    ctxIn.fillText("INDEX: "+index,10,50);
+    [ctxIn, ctxOut].forEach(ctx => {
+      ctx.font = "30px Arial";
+      ctx.fillText("INDEX: "+index,pt.X + 10,pt.Y+50);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    })
 },
 // console.log("LA ");
 
@@ -98,10 +112,10 @@ draw:function (){
     var canvas2 = document.getElementById("canvas2");
     var ctx2= canvas2.getContext('2d');
 
-    const tests= holes.getData(clipperLib.ClipType.ctUnion,true);
-    // for(let i in tests.tests){
-    //   drawscript.checkTest( tests,i,ctx1,ctx2);
-    // }
+    const tests = holes.getData(clipperLib.ClipType.ctUnion);
+    for (const i in tests.tests){
+      drawscript.checkTest(tests,i,ctx1,ctx2);
+    }
 
     holes.executeOffset(JSON.parse('[[{"X":30,"Y":30,"data":{"index":0}},{"X":130,"Y":30,"data":{"index":1}},{"X":130,"Y":130,"data":{"index":2}},{"X":30,"Y":130,"data":{"index":3}}],\
                                      [{"X":60,"Y":60,"data":{"index":10}},{"X":60,"Y":100,"data":{"index":11}},{"X":100,"Y":100,"data":{"index":12}},{"X":100,"Y":60,"data":{"index":13}}]]'));
