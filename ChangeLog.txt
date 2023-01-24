@@ -5,6 +5,12 @@ Javascript Clipper Change Log
 [NEXT] (currently on master but not released yet)
 * nothing yet
 
+v8.0.0 (24 January 2023)
+* Use Node 16 for development
+* Use NPM 8
+* remove support of Node 14 and NPM 6
+* update dependencies
+
 v7.0.1 (20 January 2023)
 * clean tests
 
