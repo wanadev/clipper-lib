@@ -16,12 +16,12 @@ This file is a memo for the maintainer.
 
 * Build ``compiled-helper/*.js`` files: ``npm run compile``
 * Edit / update changelog in ``ChangeLog.txt``
-* Add changelog and compiled files to git commit ``git add ChangeLog.txt compiled-helper/*.js && git commit``
+* Add changelog and compiled files to git commit ``git add ChangeLog.txt compiled-helper/*.js``
 * Bump version and create tag with ``npm version [patch|minor|major]``
 * ``git push && git push --tags``
 
 
-3. Publish Github Release
+2. Publish Github Release
 -------------------------
 
 * Make a release on Github
