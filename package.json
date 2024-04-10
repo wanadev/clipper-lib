@@ -19,7 +19,7 @@
     "junmer",
     "Wanadev"
   ],
-  "license": "BSL",
+  "license": "BSL-1.0",
   "devDependencies": {
     "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.12",
